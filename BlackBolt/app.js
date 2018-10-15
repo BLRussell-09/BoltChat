@@ -12,6 +12,9 @@ var users = require('./routes/users');
 
 var app = express();
 
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -60,6 +63,22 @@ app.use(function (err, req, res, next) {
 
 app.set('port', process.env.PORT || 3000);
 
-var server = app.listen(app.get('port'), function () {
-    debug('Express server listening on port ' + server.address().port);
+var server = http.listen(process.env.PORT || 3000, () =>
+{
+  console.log('Black Bolt Server is listening on port ' + server.address().port);
+});
+
+app.use(express.static('public'));
+
+io.on('connection', (socket) =>
+{
+  console.log('socket connection successful!', socket.id);
+
+  socket.on('chat', (data) => {
+    io.sockets.emit('chat', data);
+  });
+
+  socket.on('typing', (data) => {
+    socket.broadcast.emit('typing', data);
+  });
 });

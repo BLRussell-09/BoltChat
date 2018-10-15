@@ -1,5 +1,14 @@
 ﻿extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h2.center Black Bolt Chat
+
+  #mario-chat.row
+      #chat-window
+        #output
+        #feedback
+      .input-field.col.s6
+        input#handle.validate(placeholder='Username', type='text')
+      .input-field.col.s6
+        input#message(placeholder='Message', type='text', maxlength='60')
+      a#send.btn.waves-effect.indigo.accent-3 Send
